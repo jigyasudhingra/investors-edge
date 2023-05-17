@@ -21,5 +21,6 @@ export const a = async () => {
     name: "Los Angelesecdwfrq",
     state: "CA",
     country: "USA",
+    date: new Date(),
   });
 };

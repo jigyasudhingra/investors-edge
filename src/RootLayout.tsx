@@ -5,6 +5,7 @@ import WatchList from "./Screens/WatchList";
 import Portfolio from "./Screens/Portfolio";
 import StockPicker from "./Screens/StockPicker";
 import News from "./Screens/News";
+import Test from "./Screens/Test";
 
 const RouteLayout = () => {
   return (
@@ -15,6 +16,7 @@ const RouteLayout = () => {
       <Route path="/portfolio" element={<Portfolio />} />
       <Route path="/stock-picker" element={<StockPicker />} />
       <Route path="/news" element={<News />} />
+      <Route path="/test" element={<Test />} />
     </Routes>
   );
 };

@@ -1,30 +1,52 @@
-import { Box, Grid } from "@mui/material";
-import React from "react";
+import { Box, Button, Grid } from "@mui/material";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../../Contexts/UserContext";
+import { updateInFirebase } from "../Portfolio/PortfolioStockCards";
+import Loader from "../../Components/Loader";
 
-const TECHNICAL_INDICATOR_DETAILS = [
-  {
-    placeholder: "P/E Ratio",
-  },
-  {
-    placeholder: "P/E Ratio",
-  },
-  {
-    placeholder: "P/E Ratio",
-  },
-  {
-    placeholder: "P/E Ratio",
-  },
-  {
-    placeholder: "P/E Ratio",
-  },
-  {
-    placeholder: "P/E Ratio",
-  },
-];
+// const TECHNICAL_INDICATOR_DETAILS = [
+//   {
+//     field: "MA",
+//     value: "",
+//   },
+//   {
+//     field: "RSI",
+//     value: "",
+//   },
+//   {
+//     field: "MACD",
+//     value: "",
+//   },
+//   {
+//     field: "Bollinger bands",
+//     value: "",
+//   },
+//   {
+//     field: "William R%",
+//     value: "",
+//   },
+// ];
 
 const TechnicalSection = () => {
+  const { userInfo, updateData }: any = useContext(UserContext);
+  const [inputFields, setInputFields] = useState(
+    userInfo.user.settings.technicalIndicators
+  );
+  const [loading, setLoading] = useState(false);
+
+  const saveTechnicalValues = async () => {
+    setLoading(true);
+    const temp = userInfo;
+    temp.user.settings.technicalIndicators = inputFields;
+    await updateInFirebase(temp);
+    await updateData(temp);
+    setLoading(false);
+  };
+
   return (
     <Box p={3} pl={"8%"} pt={0} m={3} width={550}>
+      {loading && <Loader />}
+
       <Box color="#480283" fontFamily={"Garet Heavy"} fontSize={24}>
         Technical Indicators
       </Box>
@@ -34,9 +56,9 @@ const TechnicalSection = () => {
         market.
       </Box>
       <Grid container lg={12} item pt={2}>
-        {TECHNICAL_INDICATOR_DETAILS.map((i) => (
+        {inputFields.map((i: any, idx: number) => (
           <Grid
-            key={i.placeholder}
+            key={i.field}
             pt={2}
             fontFamily={"Garet Book"}
             fontSize={12}
@@ -46,7 +68,7 @@ const TechnicalSection = () => {
             xs={6}
           >
             <Box pb={1} color="#1B0041" fontWeight={900}>
-              {i.placeholder}
+              {i.field}
             </Box>
             <input
               style={{
@@ -59,11 +81,37 @@ const TechnicalSection = () => {
                 color: "#1B0041",
                 fontFamily: "Garet Book",
               }}
-              type="string"
+              value={i.value}
+              onChange={(e) => {
+                let temp = [...inputFields];
+                temp[idx].value = e.target.value;
+                setInputFields([...temp]);
+              }}
+              type="number"
             ></input>
           </Grid>
         ))}
       </Grid>
+      <Button
+        sx={{
+          backgroundColor: "rgba(27, 0, 65, 0.85)",
+          borderRadius: 30,
+          textDecoration: "none",
+          color: "white",
+          textTransform: "capitalize",
+          fontSize: 12,
+          padding: 1.5,
+          paddingLeft: 3,
+          paddingRight: 3,
+          marginTop: 5,
+          fontFamily: "Garet Book",
+          marginLeft: -0.5,
+          "&:hover": { backgroundColor: "rgba(27, 0, 65, 0.95)" },
+        }}
+        onClick={() => saveTechnicalValues()}
+      >
+        Save Values
+      </Button>
     </Box>
   );
 };

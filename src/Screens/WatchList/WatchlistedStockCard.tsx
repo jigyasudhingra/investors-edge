@@ -1,12 +1,31 @@
 import { Box, Button } from "@mui/material";
+import { useContext, useState } from "react";
+import { UserContext } from "../../Contexts/UserContext";
+import { updateInFirebase } from "../Portfolio/PortfolioStockCards";
+import Loader from "../../Components/Loader";
 
 const WatchlistedStockCard = ({ stockInfo }: any) => {
+  const { userInfo, updateData }: any = useContext(UserContext);
   const { metadata } = stockInfo;
   const name = metadata.name;
   const currentPrice = metadata.live_price;
   const sector = metadata.sector;
+  const [loading, setLoading] = useState(false);
+  const removeFromWatchlist = async () => {
+    setLoading(true);
+    const updatedWatchlistedStock = userInfo.watchlistedStocks.filter(
+      (i: any) => i.metadata.name !== name
+    );
 
-  console.log(stockInfo);
+    const updatedUserInfo = {
+      ...userInfo,
+      watchlistedStocks: updatedWatchlistedStock,
+    };
+    await updateInFirebase(updatedUserInfo);
+    await updateData(updatedUserInfo);
+    setLoading(false);
+  };
+
   return (
     <Box
       sx={{
@@ -18,20 +37,21 @@ const WatchlistedStockCard = ({ stockInfo }: any) => {
       pt={3}
       pb={3}
     >
-      <Box display={"flex"} justifyContent={"space-around"}>
-        <Box color="#301464">
+      {loading && <Loader />}
+      <Box display={"flex"} justifyContent={"space-around"} px={3}>
+        <Box color="#301464" width="50%">
           <Box fontSize={12}>Name</Box>
           <Box fontSize={12} fontWeight={900}>
-            {name}
+            {name.length >= 25 ? name.substring(0, 15) + "..." : name}
           </Box>
         </Box>
-        <Box color="#301464">
+        <Box color="#301464" width="25%">
           <Box fontSize={12}>Price</Box>
           <Box fontSize={12} fontWeight={900}>
             {currentPrice}
           </Box>
         </Box>
-        <Box color="#301464">
+        <Box color="#301464" width="25%">
           <Box fontSize={12}>Sector</Box>
           <Box fontSize={12} fontWeight={900}>
             {sector}
@@ -71,6 +91,7 @@ const WatchlistedStockCard = ({ stockInfo }: any) => {
             fontFamily: "Garet Book",
             "&:hover": { backgroundColor: "rgba(255, 49, 49, 0.3)" },
           }}
+          onClick={() => removeFromWatchlist()}
         >
           Remove
         </Button>

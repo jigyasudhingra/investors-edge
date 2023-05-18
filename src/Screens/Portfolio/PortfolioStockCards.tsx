@@ -1,17 +1,29 @@
 import { Box, Button } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../Contexts/UserContext";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase-config";
+import Loader from "../../Components/Loader";
 
 export const updateInFirebase = async (userInfo: any) => {
   await setDoc(doc(db, "users", "jigyasudhingra@gmail.com"), userInfo);
 };
 
 const PortfolioStockCards = ({ stockInfo }: any) => {
-  // --- Add To Watchlist ---
   const { userInfo, updateData }: any = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
+
+  // --- Add To Watchlist ---
   const addToWatchlist = async () => {
+    for (let i = 0; i < userInfo.watchlistedStocks.length; i++) {
+      if (
+        stockInfo.metadata.name === userInfo.watchlistedStocks[i].metadata.name
+      ) {
+        alert("Already on the watchlist");
+        return;
+      }
+    }
+    setLoading(true);
     const temp = {
       ...userInfo,
       watchlistedStocks:
@@ -21,7 +33,7 @@ const PortfolioStockCards = ({ stockInfo }: any) => {
     };
     await updateInFirebase(temp);
     await updateData(temp);
-    alert("Added successfully");
+    setLoading(false);
   };
 
   const { holdings, metadata } = stockInfo;
@@ -43,6 +55,7 @@ const PortfolioStockCards = ({ stockInfo }: any) => {
       alignSelf={"center"}
       pb={3}
     >
+      {loading && <Loader />}
       <Box
         display={"flex"}
         justifyContent={"space-evenly"}
@@ -91,8 +104,12 @@ const PortfolioStockCards = ({ stockInfo }: any) => {
         </Box>
         <Box color="#301464" width={"20%"}>
           <Box fontSize={12}>Day P/L</Box>
-          <Box fontSize={12} fontWeight={900}>
-            {dayChange}
+          <Box
+            color={dayChange < 0 ? "red" : "green"}
+            fontSize={12}
+            fontWeight={900}
+          >
+            {(dayChange * quantity).toFixed(2)}
           </Box>
         </Box>
       </Box>

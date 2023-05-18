@@ -27,6 +27,7 @@ const Result = () => {
       >
         {RESULT_ITEMS.map((i) => (
           <Box
+            key={i.name}
             sx={{
               backgroundColor:
                 i.result === "BUY"

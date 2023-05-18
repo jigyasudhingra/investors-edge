@@ -42,6 +42,9 @@ const PortfolioStockCards = ({ stockInfo }: any) => {
   const logoURL = metadata.logo;
   const currentPrice = metadata.live_price;
   const dayChange = metadata.day_change.toFixed(2);
+  const chartURL =
+    "https://www.tradingview.com/chart/2tMiKYh2/?symbol=NSE%3A" +
+    metadata.symbol;
 
   return (
     <Box
@@ -129,6 +132,7 @@ const PortfolioStockCards = ({ stockInfo }: any) => {
               fontFamily: "Garet Book",
               "&:hover": { backgroundColor: "rgba(0, 191, 99, 0.3)" },
             }}
+            onClick={() => (window.location.href = chartURL)}
           >
             Buy
           </Button>
@@ -147,6 +151,7 @@ const PortfolioStockCards = ({ stockInfo }: any) => {
               fontFamily: "Garet Book",
               "&:hover": { backgroundColor: "rgba(255, 49, 49, 0.3)" },
             }}
+            onClick={() => (window.location.href = chartURL)}
           >
             Sell
           </Button>

@@ -1,7 +1,48 @@
 import { Box, Button } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./stockpicker.css";
 const ChooseStocks = () => {
+  const [inputText, setInputText] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<any>([]);
+  const [clickedStocks, setClickedStocks] = useState<any>([]);
+
+  useEffect(() => {
+    const getSuggestions = async () => {
+      const temp = await fetch(
+        `https://www.nseindia.com/api/search/autocomplete?q=${inputText}`
+      );
+
+      const res = await temp.json();
+      setSuggestions(res);
+    };
+
+    if (inputText.length <= 0) return;
+
+    const timer = setTimeout(() => getSuggestions(), 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [inputText]);
+
+  const addToClickedStocks = (symbolDetail: any) => {
+    for (let i = 0; i < clickedStocks.length; i++) {
+      if (clickedStocks[i] === symbolDetail.symbol_info) {
+        setShowSuggestions(false);
+        return;
+      }
+    }
+
+    setClickedStocks([...clickedStocks, symbolDetail.symbol_info]);
+    setShowSuggestions(false);
+  };
+
+  const removeFromClikedStocks = (stockName: any) => {
+    const temp = clickedStocks.filter((i: any) => i !== stockName);
+    setClickedStocks(temp);
+  };
+
   return (
     <div>
       <Box color={"#480283"} fontSize={16} fontWeight={900} letterSpacing={0.5}>
@@ -21,6 +62,9 @@ const ChooseStocks = () => {
             color: "#58187B",
           }}
           type="text"
+          value={inputText}
+          onFocus={() => setShowSuggestions(true)}
+          onChange={(e) => setInputText(e.target.value)}
         />
         <div
           style={{
@@ -51,67 +95,68 @@ const ChooseStocks = () => {
           </div>
         </div>
       </Box>
+      {showSuggestions && (
+        <Box
+          position={"absolute"}
+          sx={{
+            backgroundColor: "white",
+            width: 350,
+            zIndex: 90,
+            maxHeight: 200,
+            overflowY: "scroll",
+          }}
+        >
+          {suggestions?.symbols?.length > 0 &&
+            suggestions.symbols.map((i: any) => (
+              <div
+                key={i.symbol}
+                style={{
+                  cursor: "pointer",
+                  padding: 3,
+                  margin: 2,
+                }}
+                onClick={() => addToClickedStocks(i)}
+              >
+                {i.symbol}
+              </div>
+            ))}
+        </Box>
+      )}
       <Box
         mt={3}
         ml={-0.5}
         display={"flex"}
         flexDirection={"row"}
         flexWrap={"wrap"}
-        width={320}
+        width={500}
         gap={2}
       >
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          width={120}
-          p={1}
-          sx={{
-            backgroundColor: "rgba(255, 49, 49, 0.1)",
-            borderRadius: 20,
-          }}
-          px={2}
-          alignItems={"center"}
-        >
-          <Box color={"#58187B"}>Google</Box>
+        {clickedStocks.map((i: any) => (
           <Box
+            key={i}
+            display={"flex"}
+            justifyContent={"space-between"}
+            p={1}
             sx={{
-              cursor: "pointer",
+              backgroundColor: "rgba(255, 49, 49, 0.1)",
+              borderRadius: 20,
             }}
-            fontSize={9}
+            px={2}
+            alignItems={"center"}
           >
-            ❌
+            <Box color={"#58187B"}>{i}</Box>
+            <Box
+              sx={{
+                cursor: "pointer",
+              }}
+              fontSize={9}
+              ml={1}
+              onClick={() => removeFromClikedStocks(i)}
+            >
+              ❌
+            </Box>
           </Box>
-        </Box>
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          width={120}
-          p={1}
-          sx={{
-            backgroundColor: "rgba(255, 49, 49, 0.1)",
-            borderRadius: 20,
-          }}
-          px={2}
-          alignItems={"center"}
-        >
-          <Box color={"#58187B"}>Google</Box>
-          <Box fontSize={9}>❌</Box>
-        </Box>
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          width={120}
-          p={1}
-          sx={{
-            backgroundColor: "rgba(255, 49, 49, 0.1)",
-            borderRadius: 20,
-          }}
-          px={2}
-          alignItems={"center"}
-        >
-          <Box color={"#58187B"}>Google</Box>
-          <Box fontSize={9}>❌</Box>
-        </Box>
+        ))}
       </Box>
       <Button
         sx={{

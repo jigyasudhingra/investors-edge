@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import React from "react";
 import ChooseStocks from "./ChooseStocks";
 import Result from "./Result";
@@ -14,7 +14,7 @@ const StockPicker = () => {
     >
       <Box p={3} m={3} px={8} width={"80%"}>
         <Box color="#480283" fontFamily={"Garet Heavy"} fontSize={24}>
-          Watchlisted Stocks
+          Stock Picker
         </Box>
         <Box pt={1} fontSize={12} width={600}>
           Investing can be a daunting task, but it doesn't have to be. With

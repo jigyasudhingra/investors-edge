@@ -1,8 +1,22 @@
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NewsCard from "./NewsCard";
+import axios from "axios";
 
 const News = () => {
+  const [news, setNews] = useState([]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      // const response = await axios.get(
+      //   `https://newsapi.org/v2/everything?q=${}&from=2023-05-17&to=2023-05-18&sortBy=popularity&searchIn=title&apiKey=8e22364a435e4941bf6c8232770fff59&pageSize=1`
+      // );
+      // setNews(response.data.articles);
+    };
+
+    fetchNews();
+  }, []);
+
   return (
     <div
       style={{

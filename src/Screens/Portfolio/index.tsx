@@ -1,8 +1,11 @@
-import { Box, Button } from "@mui/material";
-import React from "react";
+import { Box } from "@mui/material";
+import React, { useContext } from "react";
 import PortfolioStockCards from "./PortfolioStockCards";
+import { UserContext } from "../../Contexts/UserContext";
 
 const Portfolio = () => {
+  const { userInfo }: any = useContext(UserContext);
+  const stocksInfo = userInfo.user.scrips;
   return (
     <div
       style={{
@@ -16,11 +19,9 @@ const Portfolio = () => {
           Portfolio
         </Box>
         <Box display={"flex"} flexWrap={"wrap"} gap={4} mt={4}>
-          <PortfolioStockCards />
-          <PortfolioStockCards />
-          <PortfolioStockCards />
-          <PortfolioStockCards />
-          <PortfolioStockCards />
+          {stocksInfo.map((i: any) => (
+            <PortfolioStockCards key={i.metadata.name} stockInfo={i} />
+          ))}
         </Box>
       </Box>
     </div>

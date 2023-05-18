@@ -1,7 +1,36 @@
 import { Box, Button } from "@mui/material";
-import React from "react";
+import { useContext } from "react";
+import { UserContext } from "../../Contexts/UserContext";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase-config";
 
-const PortfolioStockCards = () => {
+export const updateInFirebase = async (userInfo: any) => {
+  await setDoc(doc(db, "users", "jigyasudhingra@gmail.com"), userInfo);
+};
+
+const PortfolioStockCards = ({ stockInfo }: any) => {
+  // --- Add To Watchlist ---
+  const { userInfo, updateData }: any = useContext(UserContext);
+  const addToWatchlist = async () => {
+    const temp = {
+      ...userInfo,
+      watchlistedStocks:
+        userInfo.watchlistedStocks?.length > 0
+          ? [...userInfo.watchlistedStocks, stockInfo]
+          : [stockInfo],
+    };
+    await updateInFirebase(temp);
+    await updateData(temp);
+    alert("Added successfully");
+  };
+
+  const { holdings, metadata } = stockInfo;
+  const quantity = holdings.quantity;
+  const name = metadata.name;
+  const logoURL = metadata.logo;
+  const currentPrice = metadata.live_price;
+  const dayChange = metadata.day_change.toFixed(2);
+
   return (
     <Box
       sx={{
@@ -9,7 +38,6 @@ const PortfolioStockCards = () => {
         borderRadius: 8,
         width: 450,
       }}
-      //   mt={2}
       p={2}
       pt={3}
       alignSelf={"center"}
@@ -17,46 +45,54 @@ const PortfolioStockCards = () => {
     >
       <Box
         display={"flex"}
-        justifyContent={"space-around"}
+        justifyContent={"space-evenly"}
         textAlign={"center"}
+        alignItems={"center"}
+        width="100%"
       >
         <Box
           sx={{
             backgroundColor: "rgba(48, 20, 100, 0.18)",
-            borderRadius: 30,
-            padding: 1,
-            width: 27,
-            marginLeft: -0.2,
+            borderRadius: 50,
+            padding: 0.5,
+            width: "6.9%",
           }}
+          display={"flex"}
+          justifyContent={"space-around"}
+          textAlign={"center"}
+          alignItems={"center"}
         >
           <img
-            src="https://media-public.canva.com/MADnA0CVzaE/1/thumbnail.png"
+            style={{
+              borderRadius: 30,
+            }}
+            src={logoURL}
             alt="vwesrgv"
-            width={20}
+            width={30}
           />
         </Box>
-        <Box color="#301464">
+        <Box color="#301464" width={"40%"}>
           <Box fontSize={12}>Name</Box>
           <Box fontSize={12} fontWeight={900}>
-            AAPL, Inc.
+            {name.length >= 25 ? name.substring(0, 20) + "..." : name}
           </Box>
         </Box>
-        <Box color="#301464">
-          <Box fontSize={12}>Name</Box>
+        <Box color="#301464" width={"10%"}>
+          <Box fontSize={12}>Qty</Box>
           <Box fontSize={12} fontWeight={900}>
-            AAPL, Inc.
+            {quantity}
           </Box>
         </Box>
-        <Box color="#301464">
-          <Box fontSize={12}>Name</Box>
+        <Box color="#301464" width={"10%"}>
+          <Box fontSize={12}>Price</Box>
           <Box fontSize={12} fontWeight={900}>
-            AAPL, Inc.
+            {currentPrice}
           </Box>
         </Box>
-        <Box color="#301464">
-          <Box fontSize={12}>Name</Box>
+        <Box color="#301464" width={"20%"}>
+          <Box fontSize={12}>Day P/L</Box>
           <Box fontSize={12} fontWeight={900}>
-            AAPL, Inc.
+            {dayChange}
           </Box>
         </Box>
       </Box>
@@ -113,6 +149,7 @@ const PortfolioStockCards = () => {
               fontFamily: "Garet Book",
               "&:hover": { backgroundColor: "rgba(72, 2, 131, 0.3)" },
             }}
+            onClick={() => addToWatchlist()}
           >
             Add to watchlist
           </Button>

@@ -1,6 +1,12 @@
 import { Box, Button } from "@mui/material";
 
-const WatchlistedStockCard = () => {
+const WatchlistedStockCard = ({ stockInfo }: any) => {
+  const { metadata } = stockInfo;
+  const name = metadata.name;
+  const currentPrice = metadata.live_price;
+  const sector = metadata.sector;
+
+  console.log(stockInfo);
   return (
     <Box
       sx={{
@@ -16,19 +22,19 @@ const WatchlistedStockCard = () => {
         <Box color="#301464">
           <Box fontSize={12}>Name</Box>
           <Box fontSize={12} fontWeight={900}>
-            AAPL, Inc.
+            {name}
           </Box>
         </Box>
         <Box color="#301464">
-          <Box fontSize={12}>Name</Box>
+          <Box fontSize={12}>Price</Box>
           <Box fontSize={12} fontWeight={900}>
-            AAPL, Inc.
+            {currentPrice}
           </Box>
         </Box>
         <Box color="#301464">
-          <Box fontSize={12}>Name</Box>
+          <Box fontSize={12}>Sector</Box>
           <Box fontSize={12} fontWeight={900}>
-            AAPL, Inc.
+            {sector}
           </Box>
         </Box>
       </Box>

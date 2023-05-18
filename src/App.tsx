@@ -31,7 +31,6 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(loading);
   return (
     <UserContext.Provider value={{ userInfo, updateData }}>
       <div style={{ width: "100%" }}>

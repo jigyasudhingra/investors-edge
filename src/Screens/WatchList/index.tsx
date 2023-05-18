@@ -1,7 +1,11 @@
 import { Box, Button } from "@mui/material";
 import WatchlistedStockCard from "./WatchlistedStockCard";
+import { useContext } from "react";
+import { UserContext } from "../../Contexts/UserContext";
 
 const WatchList = () => {
+  const { userInfo }: any = useContext(UserContext);
+  const watchlistedStocksList = userInfo.watchlistedStocks;
   return (
     <div
       style={{
@@ -28,10 +32,9 @@ const WatchList = () => {
           gap={5}
           flexWrap={"wrap"}
         >
-          <WatchlistedStockCard />
-          <WatchlistedStockCard />
-          <WatchlistedStockCard />
-          <WatchlistedStockCard />
+          {watchlistedStocksList.map((i: any) => (
+            <WatchlistedStockCard key={i.metadata.name} stockInfo={i} />
+          ))}
         </Box>
         <Button
           sx={{

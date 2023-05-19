@@ -1,9 +1,11 @@
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import ChooseStocks from "./ChooseStocks";
 import Result from "./Result";
 
 const StockPicker = () => {
+  const [result, setResult] = useState<any>({});
+
   return (
     <div
       style={{
@@ -30,8 +32,8 @@ const StockPicker = () => {
           gap={5}
           flexWrap={"wrap"}
         ></Box>
-        <ChooseStocks />
-        <Result />
+        <ChooseStocks result={result} setResult={setResult} />
+        {Object.keys(result).length > 0 && <Result result={result} />}
       </Box>
     </div>
   );

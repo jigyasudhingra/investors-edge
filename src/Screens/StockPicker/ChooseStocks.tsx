@@ -1,11 +1,47 @@
 import { Box, Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./stockpicker.css";
-const ChooseStocks = () => {
+import axios from "axios";
+import { UserContext } from "../../Contexts/UserContext";
+import Loader from "../../Components/Loader";
+
+const ChooseStocks = ({ result, setResult }: any) => {
   const [inputText, setInputText] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<any>([]);
   const [clickedStocks, setClickedStocks] = useState<any>([]);
+  const { userInfo }: any = useContext(UserContext);
+  const ratios = userInfo.user.settings.fundamentalRatios;
+  const [loading, setLoading] = useState(false);
+
+  const performAnalysis = async () => {
+    setLoading(true);
+    const tempRatios: any = {};
+    for (let i = 0; i < ratios.length; i++) {
+      tempRatios[ratios[i].id] = parseInt(ratios[i].value);
+    }
+    const tempStocks = [];
+    for (let i = 0; i < clickedStocks.length; i++) {
+      tempStocks.push(clickedStocks[i].symbol);
+    }
+    console.log(tempRatios, tempStocks);
+    const data = {
+      ...tempRatios,
+      stocks: tempStocks,
+    };
+
+    const temp = await fetch("http://127.0.0.1:5000/fundamental", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const res = await temp.json();
+    setResult(res);
+    setLoading(false);
+  };
 
   useEffect(() => {
     const getSuggestions = async () => {
@@ -28,13 +64,16 @@ const ChooseStocks = () => {
 
   const addToClickedStocks = (symbolDetail: any) => {
     for (let i = 0; i < clickedStocks.length; i++) {
-      if (clickedStocks[i] === symbolDetail.symbol_info) {
+      if (clickedStocks[i].symbolInfo === symbolDetail.symbol_info) {
         setShowSuggestions(false);
         return;
       }
     }
 
-    setClickedStocks([...clickedStocks, symbolDetail.symbol_info]);
+    setClickedStocks([
+      ...clickedStocks,
+      { symbol: symbolDetail.symbol, symbolInfo: symbolDetail.symbol_info },
+    ]);
     setShowSuggestions(false);
   };
 
@@ -48,6 +87,7 @@ const ChooseStocks = () => {
       <Box color={"#480283"} fontSize={16} fontWeight={900} letterSpacing={0.5}>
         Choose Stocks
       </Box>
+      {loading && <Loader />}
       <Box ml={-0.5} pt={1} display={"flex"}>
         <input
           style={{
@@ -133,7 +173,7 @@ const ChooseStocks = () => {
       >
         {clickedStocks.map((i: any) => (
           <Box
-            key={i}
+            key={i.symbol}
             display={"flex"}
             justifyContent={"space-between"}
             p={1}
@@ -144,7 +184,7 @@ const ChooseStocks = () => {
             px={2}
             alignItems={"center"}
           >
-            <Box color={"#58187B"}>{i}</Box>
+            <Box color={"#58187B"}>{i.symbolInfo}</Box>
             <Box
               sx={{
                 cursor: "pointer",
@@ -174,6 +214,7 @@ const ChooseStocks = () => {
           marginLeft: -0.5,
           "&:hover": { backgroundColor: "rgba(27, 0, 65, 0.95)" },
         }}
+        onClick={performAnalysis}
       >
         Run Analysis
       </Button>

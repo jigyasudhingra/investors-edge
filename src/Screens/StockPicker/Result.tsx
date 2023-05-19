@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 
-const Result = () => {
+const Result = ({ result }: any) => {
   return (
     <Box>
       <Box
@@ -24,13 +24,14 @@ const Result = () => {
         gap={2}
         width={650}
         flexWrap={"wrap"}
+        alignItems={"center"}
       >
-        {RESULT_ITEMS.map((i) => (
+        {Object.keys(result).map((i: any) => (
           <Box
-            key={i.name}
+            key={i}
             sx={{
               backgroundColor:
-                i.result === "BUY"
+                result[i] === "BUY"
                   ? "rgba(0, 191, 99, 0.17)"
                   : "rgba(255, 49, 49, 0.1)",
               padding: 2,
@@ -45,9 +46,9 @@ const Result = () => {
             fontSize={12}
             color="#1B0041"
           >
-            <Box>{i.name}</Box>
+            <Box alignSelf={"center"}>{i}</Box>
             <Box fontWeight={900} width={60} textAlign={"center"}>
-              {i.result}
+              {result[i]}
             </Box>
           </Box>
         ))}

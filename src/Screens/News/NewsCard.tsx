@@ -1,24 +1,6 @@
 import { Box, Button } from "@mui/material";
 
-const NEWS_DETAILS = [
-  {
-    news: "Investing can be a daunting task, but it doesn't have to be. With Investor's Edge, you can get the edge you need to win int ",
-    date: "14th May, 2023",
-    url: "",
-  },
-  {
-    news: "Investing can be a daunting task, but it doesn't have to be. With Investor's Edge, you can get the edge you need to win int ",
-    date: "14th May, 2023",
-    url: "",
-  },
-  {
-    news: "Investing can be a daunting task, but it doesn't have to be. With Investor's Edge, you can get the edge you need to win int ",
-    date: "14th May, 2023",
-    url: "",
-  },
-];
-
-const NewsCard = () => {
+const NewsCard = ({ name, news, logo }: any) => {
   return (
     <Box
       width={500}
@@ -46,20 +28,26 @@ const NewsCard = () => {
           <Box
             sx={{
               backgroundColor: "rgba(48, 20, 100, 0.18)",
-              borderRadius: 30,
-              padding: 1,
-              width: 27,
-              marginLeft: -0.2,
+              borderRadius: 50,
+              padding: 0.5,
+              width: 30,
             }}
+            display={"flex"}
+            justifyContent={"space-around"}
+            textAlign={"center"}
+            alignItems={"center"}
           >
             <img
-              src="https://media-public.canva.com/MADnA0CVzaE/1/thumbnail.png"
+              style={{
+                borderRadius: 30,
+              }}
+              src={logo}
               alt="vwesrgv"
-              width={20}
+              width={30}
             />
           </Box>
           <Box fontWeight={900} letterSpacing={0.5}>
-            AAPL, Inc.
+            {name}
           </Box>
         </Box>
         <Box display={"flex"} flexDirection={"column"}>
@@ -68,15 +56,16 @@ const NewsCard = () => {
         </Box>
       </Box>
       <Box display={"flex"} flexDirection={"column"} gap={2} fontSize={12}>
-        {NEWS_DETAILS.map((i) => (
+        {news.articles.map((i: any) => (
           <Box
+            key={i.content.substring(0, 30)}
             sx={{
               backgroundColor: "rgba(72, 2, 131, 0.05)",
               borderRadius: 8,
               padding: 3,
             }}
           >
-            <Box>{i.news}</Box>
+            <Box>{i.content}</Box>
             <Box
               display={"flex"}
               flexDirection={"row"}
@@ -84,8 +73,15 @@ const NewsCard = () => {
               mt={1.3}
               color="#58187B"
             >
-              <Box>{i.date}</Box>
-              <Box>View More</Box>
+              <Box>{new Date(i.publishedAt).toLocaleString()}</Box>
+              <Box
+                sx={{
+                  cursor: "pointer",
+                }}
+                onClick={() => (window.location.href = i.url)}
+              >
+                View More
+              </Box>
             </Box>
           </Box>
         ))}

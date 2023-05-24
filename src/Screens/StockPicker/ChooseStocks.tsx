@@ -22,7 +22,7 @@ const ChooseStocks = ({ result, setResult }: any) => {
     }
     const tempStocks = [];
     for (let i = 0; i < clickedStocks.length; i++) {
-      tempStocks.push(clickedStocks[i].symbol);
+      tempStocks.push(clickedStocks[i].symbolInfo);
     }
     console.log(tempRatios, tempStocks);
     const data = {
@@ -30,13 +30,16 @@ const ChooseStocks = ({ result, setResult }: any) => {
       stocks: tempStocks,
     };
 
-    const temp = await fetch("http://127.0.0.1:5000/fundamental", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const temp = await fetch(
+      "https://investors-edge-backend.vercel.app/fundamental",
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     const res = await temp.json();
     setResult(res);
@@ -46,14 +49,14 @@ const ChooseStocks = ({ result, setResult }: any) => {
   useEffect(() => {
     const getSuggestions = async () => {
       const temp = await fetch(
-        `https://www.nseindia.com/api/search/autocomplete?q=${inputText}`
+        `https://groww.in/v1/api/search/v1/entity?app=false&entity_type=stocks&page=0&q=${inputText}&seg=CFJmyH3759`
       );
 
       const res = await temp.json();
       setSuggestions(res);
     };
 
-    if (inputText.length <= 0) return;
+    if (inputText.length <= 1) return;
 
     const timer = setTimeout(() => getSuggestions(), 300);
 
@@ -63,8 +66,9 @@ const ChooseStocks = ({ result, setResult }: any) => {
   }, [inputText]);
 
   const addToClickedStocks = (symbolDetail: any) => {
+    console.log(symbolDetail);
     for (let i = 0; i < clickedStocks.length; i++) {
-      if (clickedStocks[i].symbolInfo === symbolDetail.symbol_info) {
+      if (clickedStocks[i].symbolInfo === symbolDetail.search_id) {
         setShowSuggestions(false);
         return;
       }
@@ -72,7 +76,11 @@ const ChooseStocks = ({ result, setResult }: any) => {
 
     setClickedStocks([
       ...clickedStocks,
-      { symbol: symbolDetail.symbol, symbolInfo: symbolDetail.symbol_info },
+      {
+        symbolName: symbolDetail.title,
+        symbolInfo: symbolDetail.search_id,
+        code: symbolDetail.nse_scrip_code,
+      },
     ]);
     setShowSuggestions(false);
   };
@@ -146,10 +154,11 @@ const ChooseStocks = ({ result, setResult }: any) => {
             overflowY: "scroll",
           }}
         >
-          {suggestions?.symbols?.length > 0 &&
-            suggestions.symbols.map((i: any) => (
+          {suggestions?.content?.length > 0 &&
+            inputText.length > 0 &&
+            suggestions.content.map((i: any) => (
               <div
-                key={i.symbol}
+                key={i.nse_scrip_code}
                 style={{
                   cursor: "pointer",
                   padding: 3,
@@ -157,7 +166,7 @@ const ChooseStocks = ({ result, setResult }: any) => {
                 }}
                 onClick={() => addToClickedStocks(i)}
               >
-                {i.symbol}
+                {i.title}
               </div>
             ))}
         </Box>
@@ -184,7 +193,7 @@ const ChooseStocks = ({ result, setResult }: any) => {
             px={2}
             alignItems={"center"}
           >
-            <Box color={"#58187B"}>{i.symbolInfo}</Box>
+            <Box color={"#58187B"}>{i.symbolName}</Box>
             <Box
               sx={{
                 cursor: "pointer",

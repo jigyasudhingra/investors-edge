@@ -50,8 +50,7 @@ const INDICATORS: any = {
 const TechnicalSection = () => {
   const { userInfo, updateData }: any = useContext(UserContext);
   const [inputFields, setInputFields] = useState(
-    // userInfo.user.settings.technicalIndicators
-    INDICATORS
+    userInfo.user.settings.technicalIndicators
   );
   const [loading, setLoading] = useState(false);
 

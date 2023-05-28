@@ -11,13 +11,14 @@ const HomeScreen = () => {
       <FeaturesSection />
       <FeaturesCard
         backgroundColor="#1B0041"
-        title="Investment Tracking"
+        title="Track your stocks"
         description="Investing can be a daunting task, but it doesn't have to be. With Investor's Edge, you can get the edge you need to win in the stock market.. 
               <br /><br />Investing can be a daunting task, but it doesn't have to be. With Investor's Edge, you can get the edge you need to win in the stock market."
         imgURL={HOME1}
         cardColor="rgba(72, 2, 131, 0.37)"
-        buttonText="Connect Broker"
+        buttonText="Add stocks"
         left={false}
+        buttonURL="/watchlist"
       />
       <FeaturesCard
         backgroundColor="#480283"
@@ -26,8 +27,9 @@ const HomeScreen = () => {
               <br /><br />Investing can be a daunting task, but it doesn't have to be. With Investor's Edge, you can get the edge you need to win in the stock market.. "
         imgURL="https://media-public.canva.com/2dG18/MAFMwl2dG18/1/s.jpg"
         cardColor="#1B0041"
-        buttonText="Connect Broker"
+        buttonText="Porfolio"
         left={true}
+        buttonURL="/portfolio"
       />
       <FeaturesCard
         backgroundColor="#1B0041"
@@ -38,6 +40,7 @@ const HomeScreen = () => {
         cardColor="rgba(72, 2, 131, 0.37)"
         buttonText="Get Started"
         left={false}
+        buttonURL="/stock-picker"
       />
       <FeaturesCard
         backgroundColor="#480283"
@@ -48,6 +51,7 @@ const HomeScreen = () => {
         cardColor="#1B0041"
         buttonText="Connect Broker"
         left={true}
+        buttonURL="/news"
       />
     </div>
   );

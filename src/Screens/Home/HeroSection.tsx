@@ -1,5 +1,6 @@
 import { Box, Button } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -73,25 +74,27 @@ const HeroSection = () => {
           >
             ONE STOP LONG term stock investment solution
           </Box>
-          <Button
-            sx={{
-              backgroundColor: "rgba(161, 0, 248, 0.7)",
-              borderRadius: 30,
-              textDecoration: "none",
-              color: "white",
-              textTransform: "capitalize",
-              fontSize: 14,
-              letterSpacing: 1.1,
-              padding: 1,
-              paddingLeft: 4,
-              marginTop: 5,
-              fontFamily: "Garet Book",
-              paddingRight: 4,
-              "&:hover": { backgroundColor: "rgba(161, 0, 248, 1)" },
-            }}
-          >
-            Get Started
-          </Button>
+          <Link to="/stock-picker">
+            <Button
+              sx={{
+                backgroundColor: "rgba(161, 0, 248, 0.7)",
+                borderRadius: 30,
+                textDecoration: "none",
+                color: "white",
+                textTransform: "capitalize",
+                fontSize: 14,
+                letterSpacing: 1.1,
+                padding: 1,
+                paddingLeft: 4,
+                marginTop: 5,
+                fontFamily: "Garet Book",
+                paddingRight: 4,
+                "&:hover": { backgroundColor: "rgba(161, 0, 248, 1)" },
+              }}
+            >
+              Get Started
+            </Button>
+          </Link>
         </Box>
       </div>
     </div>

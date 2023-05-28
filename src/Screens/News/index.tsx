@@ -1,11 +1,13 @@
-import { Box } from "@mui/material";
-import React, { useContext } from "react";
+import { Box, Button } from "@mui/material";
+import React, { useContext, useState } from "react";
 import NewsCard from "./NewsCard";
 import { UserContext } from "../../Contexts/UserContext";
 import { updateInFirebase } from "../Portfolio/PortfolioStockCards";
+import Loader from "../../Components/Loader";
 
 const News = () => {
   const { userInfo, updateData }: any = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
   const news = userInfo.news;
   const allStockNews: any = {};
   for (let i = 0; i < userInfo.user.scrips.length; i++) {
@@ -20,7 +22,7 @@ const News = () => {
     const tempNews: any = {};
     for (let i = 0; i < stockSymbols.length; i++) {
       const temp = await fetch(
-        `https://newsapi.org/v2/everything?q=${stockSymbols[i]}&from=2023-05-18&to=2023-05-19&sortBy=popularity&apiKey=8e22364a435e4941bf6c8232770fff59&pageSize=5`
+        `https://newsapi.org/v2/everything?q=${stockSymbols[i]}&from=2023-05-23&to=2023-05-28&sortBy=popularity&apiKey=8e22364a435e4941bf6c8232770fff59&pageSize=5`
       );
       const res = await temp.json();
       tempNews[stockSymbols[i]] = res;
@@ -29,11 +31,13 @@ const News = () => {
   };
 
   const fetchNews = async () => {
+    setLoading(true);
     const tempNews: any = await getAllStockNews();
     const tempUserInfo = { ...userInfo, news: tempNews };
     console.log(tempNews);
     await updateInFirebase(tempUserInfo);
     await updateData(tempUserInfo);
+    setLoading(false);
   };
 
   return (
@@ -44,6 +48,7 @@ const News = () => {
         minHeight: "100vh",
       }}
     >
+      {loading && <Loader />}
       <Box p={3} m={3} px={8} width={"80%"}>
         <Box color="#480283" fontFamily={"Garet Heavy"} fontSize={24}>
           Latest News
@@ -76,6 +81,25 @@ const News = () => {
             )
           )}
         </Box>
+        <Button
+          sx={{
+            backgroundColor: "rgba(255, 49, 49, 0.1)",
+            width: 100,
+            borderRadius: 30,
+            textDecoration: "none",
+            color: "#58187B",
+            textTransform: "capitalize",
+            fontSize: 12,
+            padding: 0.7,
+            marginTop: 2,
+            marginLeft: 1.6,
+            fontFamily: "Garet Book",
+            "&:hover": { backgroundColor: "rgba(255, 49, 49, 0.3)" },
+          }}
+          onClick={() => fetchNews()}
+        >
+          Fetch News
+        </Button>
       </Box>
     </div>
   );

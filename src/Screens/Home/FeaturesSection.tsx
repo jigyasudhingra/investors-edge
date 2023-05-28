@@ -5,13 +5,13 @@ const FeaturesSection = () => {
     <Box
       p={8}
       sx={{
-        backgroundColor: "#DDD0F4",
+        backgroundColor: "#3C026D",
         alignItems: "center",
         textAlign: "center",
       }}
     >
       <Box
-        color="#480283"
+        color="#D4B5FF"
         fontFamily="Garet Heavy"
         fontSize={24}
         letterSpacing={0.8}
@@ -19,7 +19,7 @@ const FeaturesSection = () => {
         Features
       </Box>
       <br />
-      <Box color="#1B0041" px={"25%"} letterSpacing={0.6} fontSize={12}>
+      <Box color="white" px={"25%"} letterSpacing={0.6} fontSize={12}>
         Investing can be a daunting task, but it doesn't have to be. With
         Investor's Edge, you can get the edge you need to win in the stock
         market.
@@ -38,7 +38,7 @@ const FeaturesSection = () => {
               style={{
                 borderRadius: 30,
                 fontSize: 12,
-                backgroundColor: "rgba(27, 0, 65, 0.9)",
+                backgroundColor: "#1B0041",
                 color: "white",
                 padding: "2.2%",
                 width: "40%",

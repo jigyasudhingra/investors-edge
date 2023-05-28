@@ -1,4 +1,5 @@
 import { Box, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 interface FeatureCardProps {
   backgroundColor: string;
@@ -54,24 +55,26 @@ const FeaturesCard = (props: FeatureCardProps) => {
             letterSpacing={0.5}
           ></Box>
           <Box>
-            <Button
-              sx={{
-                backgroundColor: "rgba(161, 0, 248, 0.5)",
-                borderRadius: 30,
-                textDecoration: "none",
-                color: "white",
-                textTransform: "capitalize",
-                fontSize: 13,
-                padding: 1,
-                paddingLeft: 4,
-                marginTop: 3,
-                fontFamily: "Garet Book",
-                paddingRight: 4,
-                "&:hover": { backgroundColor: "rgba(161, 0, 248, 0.8)" },
-              }}
-            >
-              {buttonText}
-            </Button>
+            <Link to={buttonURL as string}>
+              <Button
+                sx={{
+                  backgroundColor: "rgba(161, 0, 248, 0.5)",
+                  borderRadius: 30,
+                  textDecoration: "none",
+                  color: "white",
+                  textTransform: "capitalize",
+                  fontSize: 13,
+                  padding: 1,
+                  paddingLeft: 4,
+                  marginTop: 3,
+                  fontFamily: "Garet Book",
+                  paddingRight: 4,
+                  "&:hover": { backgroundColor: "rgba(161, 0, 248, 0.8)" },
+                }}
+              >
+                {buttonText}
+              </Button>
+            </Link>
           </Box>
         </Box>
         <Box width="100%">

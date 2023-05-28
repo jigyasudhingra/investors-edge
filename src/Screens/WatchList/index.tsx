@@ -36,7 +36,7 @@ const WatchList = () => {
             <WatchlistedStockCard key={i.metadata.name} stockInfo={i} />
           ))}
         </Box>
-        <Button
+        {/* <Button
           sx={{
             backgroundColor: "rgba(27, 0, 65, 0.85)",
             borderRadius: 30,
@@ -53,7 +53,7 @@ const WatchList = () => {
           }}
         >
           Add new stock
-        </Button>
+        </Button> */}
       </Box>
     </div>
   );

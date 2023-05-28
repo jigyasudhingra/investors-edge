@@ -32,7 +32,7 @@ const WatchlistedStockCard = ({ stockInfo }: any) => {
       sx={{
         backgroundColor: "rgba(72, 2, 131, 0.1)",
         borderRadius: 8,
-        width: 350,
+        width: 400,
       }}
       p={2}
       pt={3}
@@ -59,8 +59,8 @@ const WatchlistedStockCard = ({ stockInfo }: any) => {
           </Box>
         </Box>
       </Box>
-      <Box display={"flex"} pl={2} fontSize={12}>
-        <Button
+      <Box display={"flex"} justifyContent={"right"} fontSize={12}>
+        {/* <Button
           sx={{
             width: 110,
             backgroundColor: "rgba(72, 2, 131, 0.1)",
@@ -76,7 +76,7 @@ const WatchlistedStockCard = ({ stockInfo }: any) => {
           }}
         >
           View Report
-        </Button>
+        </Button> */}
         <Button
           sx={{
             backgroundColor: "rgba(255, 49, 49, 0.1)",
@@ -89,6 +89,7 @@ const WatchlistedStockCard = ({ stockInfo }: any) => {
             padding: 0.7,
             marginTop: 2,
             marginLeft: 1.6,
+            marginRight: 2,
             fontFamily: "Garet Book",
             "&:hover": { backgroundColor: "rgba(255, 49, 49, 0.3)" },
           }}

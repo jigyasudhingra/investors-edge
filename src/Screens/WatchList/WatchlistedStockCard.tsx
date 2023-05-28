@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, alpha } from "@mui/material";
 import { useContext, useState } from "react";
 import { UserContext } from "../../Contexts/UserContext";
 import { updateInFirebase } from "../Portfolio/PortfolioStockCards";
@@ -11,6 +11,7 @@ const WatchlistedStockCard = ({ stockInfo }: any) => {
   const currentPrice = metadata.live_price;
   const sector = metadata.sector;
   const [loading, setLoading] = useState(false);
+
   const removeFromWatchlist = async () => {
     setLoading(true);
     const updatedWatchlistedStock = userInfo.watchlistedStocks.filter(

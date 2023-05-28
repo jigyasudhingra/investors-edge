@@ -1,7 +1,6 @@
 import { Box, Button } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import "./stockpicker.css";
-import axios from "axios";
 import { UserContext } from "../../Contexts/UserContext";
 import Loader from "../../Components/Loader";
 

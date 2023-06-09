@@ -10,19 +10,33 @@ const News = () => {
   const [loading, setLoading] = useState(false);
   const news = userInfo.news;
   const allStockNews: any = {};
-  for (let i = 0; i < userInfo.user.scrips.length; i++) {
+  for (let i = 0; i < userInfo.user.scrips?.length; i++) {
     allStockNews[userInfo.user.scrips[i].metadata.name] = {
       logo: userInfo.user.scrips[i].metadata.logo,
       news: news[userInfo.user.scrips[i].metadata.name],
     };
   }
 
+  const getFiveDaysBeforeDate = (formatted: boolean) => {
+    var currentDate = new Date();
+    !formatted && currentDate.setDate(currentDate.getDate() - 5);
+
+    var year = currentDate.getFullYear();
+    var month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    var day = String(currentDate.getDate()).padStart(2, "0");
+
+    var formattedDate = year + "-" + month + "-" + day;
+    return formattedDate;
+  };
+
   const stockSymbols = userInfo.user.scrips.map((i: any) => i.metadata.name);
   const getAllStockNews = async () => {
     const tempNews: any = {};
-    for (let i = 0; i < stockSymbols.length; i++) {
+    for (let i = 0; i < stockSymbols?.length; i++) {
+      const fiveDaysBeforeDate = getFiveDaysBeforeDate(false);
+      const todaysDateInFormat = getFiveDaysBeforeDate(true);
       const temp = await fetch(
-        `https://newsapi.org/v2/everything?q=${stockSymbols[i]}&from=2023-05-23&to=2023-05-28&sortBy=popularity&apiKey=8e22364a435e4941bf6c8232770fff59&pageSize=5`
+        `https://newsapi.org/v2/everything?q=${stockSymbols[i]}&from=${fiveDaysBeforeDate}&to=${todaysDateInFormat}&sortBy=popularity&apiKey=8e22364a435e4941bf6c8232770fff59&pageSize=5`
       );
       const res = await temp.json();
       tempNews[stockSymbols[i]] = res;
@@ -68,8 +82,8 @@ const News = () => {
           flexWrap={"wrap"}
         >
           {/* <Button onClick={fetchNews}>Fetch News</Button> */}
-          {Object.keys(allStockNews).map((i: any) =>
-            allStockNews[i].news.articles.length > 0 ? (
+          {Object?.keys(allStockNews).map((i: any) =>
+            allStockNews[i].news?.articles?.length > 0 ? (
               <NewsCard
                 key={allStockNews[i].logo}
                 name={i}

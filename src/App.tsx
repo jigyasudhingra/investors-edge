@@ -5,6 +5,7 @@ import { UserContext, userDetails } from "./Contexts/UserContext";
 import { useEffect, useState } from "react";
 import { db } from "./firebase-config";
 import { doc, getDoc } from "firebase/firestore";
+import Loader from "./Components/Loader";
 
 const App = () => {
   const [userInfo, setUserInfo] = useState(userDetails);
@@ -37,7 +38,7 @@ const App = () => {
         <Box width="100%">
           <NavigationMenu />
         </Box>
-        {loading ? <div>...loading</div> : <RouteLayout />}
+        {loading ? <Loader /> : <RouteLayout />}
       </div>
     </UserContext.Provider>
   );

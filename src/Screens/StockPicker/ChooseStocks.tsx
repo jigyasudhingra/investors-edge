@@ -47,8 +47,18 @@ const ChooseStocks = ({ result, setResult }: any) => {
 
   useEffect(() => {
     const getSuggestions = async () => {
+      const data = {
+        input: inputText,
+      };
       const temp = await fetch(
-        `https://groww.in/v1/api/search/v1/entity?app=false&entity_type=stocks&page=0&q=${inputText}&seg=CFJmyH3759`
+        "https://investors-edge-backend.vercel.app/autocomplete",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
       );
 
       const res = await temp.json();

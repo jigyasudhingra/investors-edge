@@ -12,7 +12,7 @@ const HeroSection = () => {
         }}
       >
         <video
-          src="https://video-public.canva.com/VAE_zRNSMq8/v/5a4c0fc5a4.mp4"
+          src="https://video-public.canva.com/VAE_zRNSMq8/v/6081cce9ea.mp4"
           autoPlay
           style={{
             width: "100%",
